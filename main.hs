@@ -106,6 +106,8 @@ playMsMnd turns
    | number of possible outcomes is equal to the length of a code to the  |
    | power of the number of possible digits for each element of the code: |
    | Possible Combinations = Code Length ^ Posible Code Digits.           |
+   | The reasoning for a starting index of -1 is that the range excludes  |
+   | the first number in the range.                                       |
    +-----------------------------------------------------------------------}
 
 
