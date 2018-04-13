@@ -49,14 +49,9 @@ makeGuess code turn turns
        let guess'
              = map (toUpper) guess
 
-       -- Checking if the guess
-       -- is of an invalid length.
-       if (length guess') /= (length code)
-          then putStrLn "Code of invalid length!"
-          else
-               if guess' == code
-                  then putStrLn "You Win!"
-                  else makeTurn code (turn + 1) turns
+       if guess' == code
+          then putStrLn "You Win!"
+          else makeTurn code (turn + 1) turns
 
 
 {------------------------------------------+
