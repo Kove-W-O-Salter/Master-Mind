@@ -92,7 +92,7 @@ playMsMnd turns
 
        makeTurn (genCode codeSeed) 0 turns
 
-  where codeRange = ((-1), posibleCodes - 1)
+  where codeRange = ((-1), possibleCodes - 1)
         possibleCodes = (4 ^ 4)
 
   {-----------------------------------------------------------------------+
