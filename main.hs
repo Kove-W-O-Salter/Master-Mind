@@ -15,6 +15,16 @@ putString str
        putStr str
        hFlush stdout
 
+{--------------------------------+
+ | Convert a String to upperCase |
+ +--------------------------------}
+toUpperS :: String -> String
+toUpperS ""
+  = ""
+ 
+toUpperS string
+  = map (toUpper) string
+
 
 {------------------------------------------+
  | Generate the code via indexing          |
@@ -27,6 +37,19 @@ genCode index
                     c <- range,
                     d <- range] !! index
   where range = ['A'..'D']
+
+
+{-------------------------------------------------------+
+ | Check if the players guess was correct and, if so    |
+ | notify them of their victory, otherwise guess again. |
+ +-------------------------------------------------------}
+checkGuess :: [Char] -> [Char] -> Int -> Int -> IO ()
+checkGuess code guess turn turns
+  | guess == code
+      = do putStrLn "You Win!"
+
+  | otherwise
+      = makeTurn code (turn + 1) turns
 
 
 {----------------------------------------+
@@ -44,14 +67,7 @@ makeGuess code turn turns
        putString "  Guess: "
        guess <- getLine
 
-       -- Mapping all lowercase digits to upper
-       -- case allowing case insensitive guesses.
-       let guess'
-             = map (toUpper) guess
-
-       if guess' == code
-          then putStrLn "You Win!"
-          else makeTurn code (turn + 1) turns
+       checkGuess code (toUpperS guess) turn turns
 
 
 {------------------------------------------+
@@ -69,9 +85,13 @@ makeTurn code turn turns
        -- (current turn / maximum turns).
        putStrLn ("Turn (" ++ (show turn) ++ "/" ++ (show turns) ++ ")")
 
-       if turn < turns
-          then makeGuess code turn turns
-          else putStrLn "You Lose!"
+       -- Checking if the player is out
+       -- of turns and, if so letting
+       -- them know they've lost, otherwise
+       -- giving the manother guess.
+       if turn==turns
+          then putStrLn "You Lose!"
+          else makeGuess code turn turns
 
 
 {-------------------------------+
@@ -85,15 +105,11 @@ playMsMnd turns
   = do
        seed <- newStdGen
 
-       -- The number wich determines
-       -- wich match shall be used
-       let codeSeed
-             = fst (randomR codeRange seed)
+       makeTurn (genCode (codeSeed seed)) 1 turns
 
-       makeTurn (genCode codeSeed) 0 turns
-
-  where codeRange = ((-1), possibleCodes - 1)
+  where codeRange     = (0 - 1, possibleCodes - 1)
         possibleCodes = (4 ^ 4)
+        codeSeed seed = fst (randomR codeRange seed)
 
   {-----------------------------------------------------------------------+
    | codeRange determines the range of codes (first index, last index).   |
@@ -101,8 +117,8 @@ playMsMnd turns
    | number of possible outcomes is equal to the length of a code to the  |
    | power of the number of possible digits for each element of the code: |
    | Possible Combinations = Code Length ^ Posible Code Digits.           |
-   | The reasoning for a starting index of -1 is that the range excludes  |
-   | the first number in the range.                                       |
+   | The reasoning for a starting index of 0 - 1 is that the range        |
+   | excludes the first number in the range.                              |
    +-----------------------------------------------------------------------}
 
 
