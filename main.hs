@@ -2,10 +2,10 @@ import System.Random
 import System.IO
 import Data.Char
 
-{----------------------------------
- - Print str without a newline    -
- - automatically flushing stdout. -
- ----------------------------------}
+{---------------------------------+
+ | Print str without a newline    |
+ | automatically flushing stdout. |
+ +---------------------------------}
 putString :: String -> IO ()
 putString ""
   = error "Cannot print empty String!"
@@ -16,10 +16,10 @@ putString str
        hFlush stdout
 
 
-{-------------------------------------------
+{------------------------------------------+
  | Generate the code via indexing          |
  | all posible code combinations at index. |
- -------------------------------------------}
+ +------------------------------------------}
 genCode :: Int -> [Char]
 genCode index
   = [[a, b, c, d] | a <- range,
@@ -29,12 +29,12 @@ genCode index
   where range = ['A'..'D']
 
 
-{-----------------------------------------
+{----------------------------------------+
  | Prompt the player to make a guess and |
  | check if their guess was right. If so |
  | leave the game. Otherwise guess again |
  | updating turn to the next.            |
- -----------------------------------------}
+ +----------------------------------------}
 makeGuess :: [Char] -> Int -> Int -> IO ()
 makeGuess [] _ _
   = error "Cannot make guess with empty List!"
@@ -59,11 +59,11 @@ makeGuess code turn turns
                   else makeTurn code (turn + 1) turns
 
 
-{-------------------------------------------
+{------------------------------------------+
  | Display turn information, check if the  |
  | player is out of turns and if their not |
  | make another guess.                     |
- -------------------------------------------}
+ +------------------------------------------}
 makeTurn :: [Char] -> Int -> Int -> IO ()
 makeTurn [] _ _
   = error "Cannot make turn on an empty list!"
@@ -79,14 +79,14 @@ makeTurn code turn turns
           else putStrLn "You Lose!"
 
 
-{--------------------------------
+{-------------------------------+
  | Play a game of MstrMnd.      |
  | Where turns specifys         |
  | the number of incorrect      |
  | guesses the player can make. |
- --------------------------------}
-playMstrMnd :: Int -> IO ()
-playMstrMnd turns
+ +-------------------------------}
+playMsMnd :: Int -> IO ()
+playMsMnd turns
   = do
        seed <- newStdGen
 
@@ -99,16 +99,16 @@ playMstrMnd turns
 
   where codeRange = ((-1), (4^4) - 1)
 
-  {---------------------------------------------------
-   | codeRange is the range of all posible           |
-   | code combinations (0 .. 255). The reasoning     |
-   | for 4 ^ 4 is that the total number of posible   |
-   | combinations is equal to the length of the code |
-   | to the power of the length of the code.         |
-   ---------------------------------------------------}
+  {-----------------------------------------------------------------------+
+   | codeRange determines the range of codes (first index, last index).   |
+   | The reason that the last index is (4^4) - 1 (255) is that the total  |
+   | number of possible outcomes is equal to the length of a code to the  |
+   | power of the number of possible digits for each element of the code: |
+   | Possible Combinations = Code Length ^ Posible Code Digits.           |
+   +-----------------------------------------------------------------------}
 
 
 main :: IO ()
 main
   = do
-       playMstrMnd 10
+       playMsMnd 10
