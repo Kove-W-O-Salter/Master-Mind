@@ -97,7 +97,8 @@ playMsMnd turns
 
        makeTurn (genCode codeSeed) 0 turns
 
-  where codeRange = ((-1), (4^4) - 1)
+  where codeRange = ((-1), posibleCodes - 1)
+        possibleCodes = (4 ^ 4)
 
   {-----------------------------------------------------------------------+
    | codeRange determines the range of codes (first index, last index).   |
